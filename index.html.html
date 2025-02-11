@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rate A Ref - Submit Review</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    form {
+      display: inline-block;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, textarea {
+      width: 300px;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit a Referee Review</h1>
+  <form id="reviewForm">
+    <label for="name">Referee Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="reviewText">Review:</label>
+    <textarea id="reviewText" required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("reviewForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let name = document.getElementById("name").value.trim();
+        let reviewText = document.getElementById("reviewText").value.trim();
+
+        if (!name || !reviewText) {
+            alert("Please fill out both fields.");
+            return;
+        }
+
+        let formData = { name: name, review: reviewText };
+
+        fetch("https://script.google.com/macros/s/AKfycbypgArU_gP5SLiCUd_4NWCdDQVjI1qIKzPV6a1pT_n0x0E8EQXrq-SFe-vn98ZdM2pCQg/exec", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Server response:", data);
+            alert("Review submitted successfully!");
+            document.getElementById("reviewForm").reset();
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            alert("Submission failed!");
+        });
+    });
+  </script>
+</body>
+</html>
